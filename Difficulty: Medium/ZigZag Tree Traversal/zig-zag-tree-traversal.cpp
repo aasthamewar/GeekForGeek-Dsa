@@ -1,44 +1,56 @@
+/*Structure of the node of the binary tree is as
+struct Node {
+    int data;
+    Node *left;
+    Node *right;
+
+    Node(int val) {
+        data = val;
+        left = right = NULL;
+    }
+};
+*/
+
 class Solution {
   public:
     // Function to store the zig zag order traversal of tree in a list.
     vector<int> zigZagTraversal(Node* root) {
+        // Code here
         vector<int> ans;
-        if (root == NULL) {
+        if(root==NULL){
             return ans;
         }
-
+        
         queue<Node*> q;
         q.push(root);
-        bool flag = true;  // true for left to right, false for right to left
-
-        while (!q.empty()) {
+        bool leftToRight = true;
+        
+        while(!q.empty()){
             int size = q.size();
-            vector<int> row(size);
-
-            for (int i = 0; i < size; i++) {
-                Node* node = q.front();
+            vector<int>ans1(size);
+            
+            for(int i=0;i<size;i++){
+                Node* frontq=q.front();
                 q.pop();
-
-                // Find position to fill node's data
-                int index = (flag) ? i : (size - 1 - i);
-                row[index] = node->data;
-
-                if (node->left) {
-                    q.push(node->left);
+                
+                int index = leftToRight?i:size-i-1;
+                
+                ans1[index] = frontq->data;
+                
+                if(frontq->left){
+                    q.push(frontq->left);
                 }
-                if (node->right) {
-                    q.push(node->right);
+                if(frontq->right){
+                    q.push(frontq->right);
                 }
+                
             }
-
-            // Add current level's result to final answer
-            for (int val : row) {
-                ans.push_back(val);
+            leftToRight = !leftToRight;
+            
+            for(auto i:ans1){
+                ans.push_back(i);
             }
-
-            flag = !flag;  // toggle direction
         }
-
         return ans;
     }
 };
